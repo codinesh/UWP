@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -20,13 +21,13 @@
                 <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="APP OVERVIEW"/>
             </c:PageHeader.HeaderContent>
         </c:PageHeader>
-
+        
         <ScrollViewer Grid.Row="1" EntranceNavigationTransitionInfo.IsTargetElement="True" Margin="12,4,0,0">
-            <StackPanel >
-                <CalendarView></CalendarView>
-                <CalendarDatePicker></CalendarDatePicker>
-                <TimePicker></TimePicker>
-                
+            <RelativePanel x:Name="rp">
+
+                <TextBlock Text="Click to get the location in map"></TextBlock>
+                <Button x:Name="btnGetLocatioin" Content="Click Me!" Click="Location_Click"></Button>
+                <Maps:MapControl Name="Map" MapServiceToken="AtmksQlJbWwXX6wWzUNx2KRiYj_2PblvGPo0_RicXiM-HCb2epkj0sDAfwQl7hor" RelativePanel.AlignLeftWithPanel="True"></Maps:MapControl>
                 <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}">Top-Level Navigation</TextBlock>
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">This sample demonstrates a universal Windows app with top-level navigation.</TextBlock>
 
@@ -37,7 +38,8 @@
 
                 <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Things to see:</TextBlock>
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,8"> 1) App.xaml - The startup sequence using AppShell as the root element instead of a Frame.</TextBlock>-->
-            </StackPanel>
+            </RelativePanel>
+            
         </ScrollViewer>
     </Grid>
 </Page>
