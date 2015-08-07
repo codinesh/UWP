@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*.user
+/Alarm/Alarm/project.lock.json
+/Alarm/Alarm/bin
+/Alarm/Alarm/obj
+/Alarm/.vs/Alarm/v14

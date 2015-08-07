@@ -7,39 +7,68 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition />
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="wideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="myMap.Height" Value="800"/>
+                        <Setter Target="myMap.Width" Value="900"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="narrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="myMap.Height" Value="230"/>
+                        <Setter Target="myMap.Width" Value="280"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
         <c:PageHeader x:Name="pageHeader">
             <c:PageHeader.HeaderContent>
-                <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="APP OVERVIEW"/>
+                <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="Select Location in Map"/>
             </c:PageHeader.HeaderContent>
         </c:PageHeader>
-        
-        <ScrollViewer Grid.Row="1" EntranceNavigationTransitionInfo.IsTargetElement="True" Margin="12,4,0,0">
-            <RelativePanel x:Name="rp">
 
-                <TextBlock Text="Click to get the location in map"></TextBlock>
-                <Button x:Name="btnGetLocatioin" Content="Click Me!" Click="Location_Click"></Button>
-                <Maps:MapControl Name="Map" MapServiceToken="AtmksQlJbWwXX6wWzUNx2KRiYj_2PblvGPo0_RicXiM-HCb2epkj0sDAfwQl7hor" RelativePanel.AlignLeftWithPanel="True"></Maps:MapControl>
-                <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}">Top-Level Navigation</TextBlock>
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">This sample demonstrates a universal Windows app with top-level navigation.</TextBlock>
-
-                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Overview</TextBlock>
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">The root of the app is an AppShell of type Page instead of a Frame.
-                    It uses a SplitView to present both the top-level navigation menu and a Frame for navigating between pages in the app.  The AppShell also 
-                </TextBlock>
-
-                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Things to see:</TextBlock>
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,8"> 1) App.xaml - The startup sequence using AppShell as the root element instead of a Frame.</TextBlock>-->
-            </RelativePanel>
+        <RelativePanel x:Name="RootGrid" Grid.Row="1" Margin="12,20,12,14">
+            <Slider Minimum="1" Maximum="20" Header="Zoom Level" Width="900" Name="zoomSlider" Value="12"/>
+            <TextBlock Name="txtZoomLevel" Text="{Binding ElementName=zoomSlider, Path=Value}" RelativePanel.RightOf="zoomSlider"/>
+            <StackPanel Name="spButtons" RelativePanel.Below="zoomSlider" Orientation="Horizontal">
+                <Button Margin="5,0,5,0" Name="btnCurrentLocation" Content="Current Location" Click="btnCurrentLocation_Click"></Button>
+                <Button Margin="5,0,5,0" Name="btnAddMapIcon" Content="Add Map Icon" Click="btnAddMapIcon_Click"></Button>
+                <Button Margin="5,0,5,0" Name="btnClearMapIcons" Content="Clear Map Icons" Click="btnClearMapIcons_Click"></Button>
+            </StackPanel>
             
-        </ScrollViewer>
+            <CheckBox Content="Traffic Flow Visible" 
+                      RelativePanel.Below="spButtons"
+                      x:Name="trafficFlowVisibleCheckBox" Checked="TrafficFlowVisible_Checked" 
+                               Unchecked="trafficFlowVisibleCheckBox_Unchecked" />
+
+            <maps:MapControl x:Name="myMap" RelativePanel.Below="trafficFlowVisibleCheckBox"
+                                     ZoomLevel="{Binding ElementName=zoomSlider,Path=Value, Mode=TwoWay}"
+                                     Heading="{Binding ElementName=headingSlider,Path=Value, Mode=TwoWay}"
+                                     DesiredPitch="{Binding ElementName=desiredPitchSlider,Path=Value, Mode=TwoWay}"    
+                                     HorizontalAlignment="Left"
+                                     />
+
+            <!-- Status Block for providing messages to the user.  Use the
+             NotifyUser() method to populate the message -->
+            <Border x:Name="ErrorBorder" Background="Red" RelativePanel.Below="myMap"/>
+        </RelativePanel>
     </Grid>
 </Page>
